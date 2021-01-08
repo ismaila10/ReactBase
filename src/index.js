@@ -9,15 +9,36 @@ class App extends React.Component {
       { id: 2, nom: "Dany Jean Charles" },
       { id: 3, nom: "Dorain Deguen" }
     ],
-    compteur: 0
+    nouveauClient: ""
   };
 
-  handleClick() {
+  handleDelete(id) {
     const clients = this.state.clients.slice();
-    clients.push({ id: 4, nom: "Yanis Fetch" });
+    const index = clients.findIndex((client) => client.id === id);
+
+    clients.splice(index, 1);
 
     this.setState({ clients: clients });
   }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    const id = new Date().getTime();
+    const nom = this.state.nouveauClient;
+
+    const client = { id: id, nom: nom };
+
+    const clients = this.state.clients.slice();
+    clients.push(client);
+
+    this.setState({ clients: clients, nouveauClient: "" });
+  };
+
+  handleChange = (event) => {
+    const value = event.currentTarget.value;
+    this.setState({ nouveauClient: value });
+  };
 
   render() {
     const title = "Liste des clients";
@@ -25,17 +46,21 @@ class App extends React.Component {
     return (
       <div>
         <h1> {title} </h1>
-        {this.state.compteur}
-        <button onClick={this.handleClick.bind(this)}>Click me</button>
         <ul>
           {this.state.clients.map((client) => (
             <li>
-              {client.nom} <button>X</button>
+              {client.nom}{" "}
+              <button onClick={() => this.handleDelete(client.id)}>X</button>
             </li>
           ))}
         </ul>
-        <form>
-          <input type="text" placeholder="Ajouter un client" />
+        <form onSubmit={this.handleSubmit}>
+          <input
+            value={this.state.nouveauClient}
+            onChange={this.handleChange}
+            type="text"
+            placeholder="Ajouter un client"
+          />
           <button>Confirmer</button>
         </form>
       </div>
