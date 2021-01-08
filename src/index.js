@@ -10,8 +10,7 @@ class App extends React.Component {
       { id: 1, nom: "Ismaila Diallo" },
       { id: 2, nom: "Dany Jean Charles" },
       { id: 3, nom: "Dorain Deguen" }
-    ],
-    nouveauClient: ""
+    ]
   };
 
   handleDelete = (id) => {
