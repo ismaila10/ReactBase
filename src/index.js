@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Client from "./Client";
+import ClientForm from "./ClientForm";
 import "./styles.css";
 
 class App extends React.Component {
@@ -12,29 +14,20 @@ class App extends React.Component {
     nouveauClient: ""
   };
 
-  handleDelete(id) {
+  handleDelete = (id) => {
     const clients = [...this.state.clients];
     const index = clients.findIndex((client) => client.id === id);
 
     clients.splice(index, 1);
 
     this.setState({ clients });
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    const id = new Date().getTime();
-    const nom = this.state.nouveauClient;
-
-    const clients = [...this.state.clients];
-    clients.push({ id, nom });
-
-    this.setState({ clients, nouveauClient: "" });
   };
 
-  handleChange = (event) => {
-    this.setState({ nouveauClient: event.currentTarget.value });
+  handleAdd = (client) => {
+    const clients = [...this.state.clients];
+    clients.push(client);
+
+    this.setState({ clients });
   };
 
   render() {
@@ -45,21 +38,10 @@ class App extends React.Component {
         <h1> {title} </h1>
         <ul>
           {this.state.clients.map((client) => (
-            <li>
-              {client.nom}{" "}
-              <button onClick={() => this.handleDelete(client.id)}>X</button>
-            </li>
+            <Client details={client} onDelete={this.handleDelete} />
           ))}
         </ul>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            value={this.state.nouveauClient}
-            onChange={this.handleChange}
-            type="text"
-            placeholder="Ajouter un client"
-          />
-          <button>Confirmer</button>
-        </form>
+        <ClientForm onClientAdd={this.handleAdd} />
       </div>
     );
   }
